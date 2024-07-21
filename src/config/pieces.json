@@ -1,0 +1,43 @@
+{
+    "width": 300,
+    "height": 300,
+    "randomizeOnStart": true,
+    "pieces": [
+        [
+            "one",
+            "one",
+            "one",
+            "one",
+            "one"
+        ],
+        [
+            "two",
+            "two",
+            "two",
+            "two",
+            "two"
+        ],
+        [
+            "three",
+            "three",
+            "three",
+            "three",
+            "three"
+        ],
+        [
+            "four",
+            "four",
+            "four",
+            "four",
+            "four"
+        ],
+        [
+            "five",
+            "five",
+            "five",
+            "five",
+            "five"
+        ]
+    ]
+
+}
