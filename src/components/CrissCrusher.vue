@@ -1,7 +1,7 @@
 <script setup>
 import { uniq, flatten } from 'lodash';
 import { transpose } from 'lodash-transpose';
-import { TweenLite, Sine } from 'gsap';
+import gsap, { Sine } from 'gsap';
 import BlockExplosion from './animations/BlockExplosion.vue';
 import colorConfig from '../config/crushConfig';
 import { initGame } from '../engine/index';
@@ -272,13 +272,11 @@ const updateBlocks = (results) => {
         }));
     crissCrossData.game.matrix = transpose(reordered);
     crissCrossData.game.pieces = flatten(crissCrossData.game.matrix);
-    // crissCrossData.$forceUpdate();
-    console.log(JSON.parse(JSON.stringify(crissCrossData.game.matrix)));
-    console.log(JSON.parse(JSON.stringify(crissCrossData.game.pieces)));
     if (shouldAnimate) {
         for (let i = 0; i < crissCrossData.game.pieces.length; i++) {
             const targetY = crissCrossData.game.pieces[i].drop;
-            TweenLite.to(crissCrossData.game.pieces[i], props.dropDuration, {
+            gsap.to(crissCrossData.game.pieces[i], {
+                duration: props.dropDuration,
                 y: targetY,
                 ease: Sine.easeIn,
                 onUpdate: () => {
