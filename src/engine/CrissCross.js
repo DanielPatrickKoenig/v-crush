@@ -3,7 +3,7 @@ export default class CrissCross {
     constructor ({ columns, rows, width, height, random, dataMatrix, swapping }) {
         this.dragging = false;
         this.selectedBlock = undefined;
-        this.minMovement = 20;
+        this.minMovement = 5;
         this.moveCount = 0;
         this.group = [];
         this.dragStartPosition = { x: 0, y: 0 };
@@ -25,6 +25,21 @@ export default class CrissCross {
         if (random) {
             this.randomize();
         }
+    }
+    resize(size){
+        const ratio = size / this.width;
+        this.width = size;
+        this.height *= ratio;
+        this.matrix.forEach(item => {
+            item.forEach(_item => {
+                _item.origin.x *= ratio;
+                _item.origin.y *= ratio;
+                _item.width *= ratio;
+                _item.height *= ratio;
+                _item.x *= ratio;
+                _item.y *= ratio;
+            });
+        });
     }
     down (column, row, position) {
         this.selectedBlock = this.matrix[row][column];

@@ -2,10 +2,9 @@
 import { uniq, flatten } from 'lodash';
 import { transpose } from 'lodash-transpose';
 import gsap, { Sine } from 'gsap';
-import BlockExplosion from './animations/BlockExplosion.vue';
 import colorConfig from '../config/crushConfig';
 import { initGame } from '../engine/index';
-import { reactive } from "vue";
+import { computed, reactive, watch } from "vue";
 import { processEvent } from '../utils/Utilities';
 
 const config = JSON.parse(colorConfig);
@@ -20,10 +19,6 @@ const props = defineProps({
 
 const crissCrossData = reactive({
     game: initGame(config),
-    pieceWidth: config.width / config.pieces.length,
-    pieceHeight: config.height / config.pieces.length,
-    boardWidth: config.width,
-    boardHeight: config.height,
     useContainer: false,
     gameState: null,
 
@@ -41,6 +36,25 @@ const crissCrossData = reactive({
     pointsPerBlock: 10,
     
 });
+
+const blockSize = computed(() => {
+    return {
+        width: crissCrossData.game.width / config.pieces.length,
+        height: crissCrossData.game.height / config.pieces.length,
+    };
+});
+
+const boardSize = computed(() => {
+    return {
+        width: crissCrossData.game.width,
+        height: crissCrossData.game.height,
+    };
+});
+
+watch(crissCrossData, () => {
+    console.log('new point vallue');
+    console.log(crissCrossData.points);
+},{deep: true})
 crissCrossData.validValues = uniq(crissCrossData.game.pieces.map(item => item.data));
 
 const getOverlayElement = (el) => {
@@ -307,24 +321,32 @@ const updateBlocks = (results) => {
 
 setPatterns(config.patterns.primary);
 
+const resetSize = () => {
+    const size = 500 - Math.random()*200;
+    crissCrossData.game.resize(size);
+}
+
 </script>
 
 <template>
-    <div
-        class="criss-cross"
-        :style="{ width: `${crissCrossData.boardWidth}px`, height: `${crissCrossData.boardWidth}px` }"
-    >
-        <div 
-            v-for="piece in crissCrossData.game.pieces"
-            :key="piece"
-            class="block"
-            :class="`block-${piece.data}`"
-            :style="{ left: `${piece.x}px`, top: `${piece.y}px`, width: `${crissCrossData.pieceWidth}px`, height: `${crissCrossData.pieceHeight}px` }"
-            :column="piece.column"
-            :row="piece.row"
-            @mousedown="down"
-            @touchstart="down"
+    <div>
+        <div
+            class="criss-cross"
+            :style="{ width: `${boardSize.width}px`, height: `${boardSize.height}px` }"
         >
+            <div 
+                v-for="piece in crissCrossData.game.pieces"
+                :key="piece"
+                class="block"
+                :class="`block-${piece.data}`"
+                :style="{ left: `${piece.x}px`, top: `${piece.y}px`, width: `${blockSize.width}px`, height: `${blockSize.height}px` }"
+                :column="piece.column"
+                :row="piece.row"
+                @mousedown="down"
+                @touchstart="down"
+            >
+            </div>
+            
         </div>
     </div>
 </template>
